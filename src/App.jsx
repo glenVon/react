@@ -1,37 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import css from'/index.css'
-import '/App.css'
+// src/App.js
+import React, { useState } from 'react';
+import './App.css';
+import Navbar from './components/Navbar.jsx';
+import Home from './pages/Home.jsx';
+import Footer from './components/Footer.jsx';
+import Producto from './components/Producto.jsx';
+import RegistroPopup from './components/RegistroPopup.jsx';
+import LoginPopup from './components/LoginPopup.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // Estado global para el carrito
+  const [carrito, setCarrito] = useState([]);
+  
+  // Función para agregar productos al carrito
+  const agregarAlCarrito = (producto) => {
+    setCarrito(prevCarrito => {
+      const existente = prevCarrito.find(item => item.id === producto.id);
+      if (existente) {
+        return prevCarrito.map(item => 
+          item.id === producto.id 
+            ? { ...item, cantidad: item.cantidad + 1 }
+            : item
+        );
+      } else {
+        return [...prevCarrito, { ...producto, cantidad: 1 }];
+      }
+    });
+  };
 
   return (
-    <>
-    <style>{css}</style>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <Navbar carrito={carrito} setCarrito={setCarrito} />
+      <Home agregarAlCarrito={agregarAlCarrito} />
+      <LoginPopup />
+      <Producto />
+      <RegistroPopup />
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;
