@@ -1,8 +1,8 @@
-// src/pages/Home.js
 import React from 'react';
 import Producto from '../components/Producto';
 
 // Datos de productos (podrían venir de una API)
+
 const productos = [
   {
     id: 1, 
